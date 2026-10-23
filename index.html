@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selamat Ulang Tahun 🎂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+/* ===== TOKEN WARNA & DASAR ===== */
+:root{--peach:#ffd9c0;--pink:#ffc4d6;--butter:#fff1b8;--lav:#d9c8f5;--gold:#d4a017;--ink:#4a3550;--card:rgba(255,255,255,.72)}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',system-ui,sans-serif;color:var(--ink);line-height:1.7;font-size:1.05rem;overflow-x:hidden;
+ background:linear-gradient(120deg,var(--peach),var(--pink),var(--butter),var(--lav),var(--peach));background-size:400% 400%;animation:bg 24s ease infinite}
+@keyframes bg{50%{background-position:100% 50%}}
+h1,h2,h3{font-family:'Pacifico',cursive;font-weight:400;line-height:1.35}
+h2{font-size:clamp(1.7rem,6vw,2.6rem);text-align:center;margin-bottom:1.5rem}
+section{padding:4rem 1.25rem;max-width:62rem;margin:auto}
+.hide{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer}
+.btn{min-height:48px;padding:.7rem 1.6rem;border:0;border-radius:99px;font-weight:800;color:#fff;
+ background:linear-gradient(135deg,#f58aa8,#e8a24c);box-shadow:0 6px 18px rgba(212,160,23,.35);transition:transform .2s}
+.btn:hover{transform:translateY(-3px) scale(1.04)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+canvas#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+#bal{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.b{position:absolute;bottom:-8rem;width:3rem;height:3.8rem;border-radius:50% 50% 48% 48%;opacity:.8;animation:up linear forwards}
+.b::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:3rem;background:rgba(74,53,80,.35)}
+@keyframes up{to{transform:translateY(-130vh) rotate(8deg)}}
+main,header{position:relative;z-index:2}
+
+/* ===== HERO ===== */
+header{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1.25rem;gap:1.5rem}
+#title{font-size:clamp(2rem,8vw,4rem);min-height:3.2em;max-width:16em;color:#b5496b;text-shadow:0 2px 0 #fff8}
+#title.t::after{content:"|";color:var(--gold);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+#openBtn{font-size:1.3rem;padding:1rem 2.4rem}
+#openBtn.pulse{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.07)}}
+
+/* Lilin */
+.cake{display:flex;flex-direction:column;align-items:center;background:none;border:0;padding:.5rem}
+.flame{width:1.1rem;height:1.7rem;background:radial-gradient(circle at 50% 70%,#fff6b0,#ffb52e 60%,#ff7a2e);border-radius:50% 50% 50% 50%/65% 65% 35% 35%;
+ transform-origin:50% 100%;animation:fl .35s ease-in-out infinite alternate;box-shadow:0 0 22px 8px rgba(255,190,60,.55);transition:opacity .4s}
+.cake.off .flame{opacity:0;animation:none}
+@keyframes fl{to{transform:scale(1.12,.92) rotate(3deg)}}
+.wick{width:3px;height:.6rem;background:#7b5a6b}
+.candle{width:.9rem;height:3rem;background:repeating-linear-gradient(135deg,#fff 0 .4rem,var(--pink) .4rem .8rem);border-radius:3px}
+.cake .l1{width:9rem;height:2.6rem;background:#fff;border-radius:.8rem .8rem 0 0;border-bottom:.7rem solid var(--pink)}
+.cake .l2{width:12rem;height:3.2rem;background:var(--butter);border-radius:.6rem;border-bottom:.8rem solid var(--lav);box-shadow:0 8px 14px rgba(0,0,0,.1)}
+.hint{font-size:.95rem;opacity:.8}
+
+/* ===== KARTU ===== */
+.grid{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr))}
+.card{background:var(--card);border-radius:1.4rem;padding:1.5rem;box-shadow:0 8px 24px rgba(120,70,110,.12);backdrop-filter:blur(6px);transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(120,70,110,.2)}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .8s,transform .8s}
+.rv.in{opacity:1;transform:none}
+.lead{max-width:38rem;margin:0 auto 2rem;text-align:center}
+
+/* Kutipan */
+.quote{min-height:11rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1.2rem;max-width:40rem;margin:auto;border:2px dashed var(--gold)}
+.quote p{font-size:1.2rem;font-weight:600}
+.quote p.swap{animation:sw .6s}
+@keyframes sw{from{opacity:0;transform:translateY(14px) scale(.96)}}
+
+/* Flip card */
+.flip{perspective:900px;background:none;border:0;padding:0;min-height:12rem;text-align:center}
+.fi{position:relative;width:100%;height:100%;min-height:12rem;transition:transform .7s;transform-style:preserve-3d}
+.flip.on .fi{transform:rotateY(180deg)}
+.fi>div{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:1.4rem;padding:1.2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;box-shadow:0 8px 24px rgba(120,70,110,.15)}
+.fr{background:linear-gradient(135deg,#fff,var(--butter));font-size:1.3rem;font-weight:800}
+.fr span{font-size:2.2rem}
+.bk{background:linear-gradient(135deg,var(--lav),var(--pink));transform:rotateY(180deg);font-weight:600}
+
+/* Hadiah */
+.gift{text-align:center}
+#giftBtn{font-size:6rem;background:none;border:0;min-width:44px;min-height:44px;animation:shake 2.5s infinite;filter:drop-shadow(0 8px 10px rgba(0,0,0,.15))}
+@keyframes shake{0%,70%,100%{transform:rotate(0)}75%{transform:rotate(-8deg)}85%{transform:rotate(8deg)}}
+
+/* Album polaroid */
+.album{display:grid;gap:1.6rem 1.25rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr));padding:.5rem}
+.pol{position:relative;background:#fff;border:0;padding:.6rem .6rem .5rem;border-radius:.3rem;text-align:center;
+ box-shadow:0 8px 20px rgba(120,70,110,.22);transform:rotate(var(--r,0deg));transition:transform .25s,box-shadow .25s}
+.pol::before{content:"";position:absolute;top:-.6rem;left:50%;width:4rem;height:1.3rem;margin-left:-2rem;background:rgba(255,230,150,.8);transform:rotate(-3deg)}
+button.pol:hover,button.pol:focus-visible{transform:rotate(0) scale(1.05);box-shadow:0 14px 28px rgba(120,70,110,.3)}
+.ph{aspect-ratio:4/5;background:var(--butter);border:2px dashed var(--gold);border-radius:.2rem;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:.9rem;padding:.5rem;color:#8a6a7a}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.pol .cap{font-family:'Pacifico',cursive;font-size:.95rem;margin-top:.5rem;line-height:1.4}
+.md img{max-width:100%;max-height:60svh;border-radius:1rem;margin:.5rem 0}
+
+/* Penutup */
+.end{text-align:center;max-width:40rem}
+.sign{font-family:'Pacifico',cursive;font-size:1.6rem;margin:1.5rem 0;color:#b5496b}
+
+/* ===== MODAL ===== */
+.ov{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(74,53,80,.5);backdrop-filter:blur(3px)}
+.ov.show{display:flex}
+.md{position:relative;width:min(100%,26rem);max-height:90svh;overflow:auto;text-align:center;background:linear-gradient(160deg,#fff,var(--butter));
+ border:3px solid var(--gold);border-radius:1.8rem;padding:2rem 1.5rem 1.6rem;animation:pop .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes pop{from{transform:scale(.4);opacity:0}}
+.md .em{font-size:3.2rem}
+.md h3{font-size:1.5rem;margin:.4rem 0 .7rem;color:#b5496b}
+.md .btn{margin-top:1.2rem}
+.x{position:absolute;top:.5rem;right:.5rem;width:44px;height:44px;border:0;border-radius:50%;background:var(--pink);font-size:1.5rem;line-height:1}
+
+/* Sparkle & musik */
+.sp{position:fixed;pointer-events:none;z-index:60;color:var(--gold);animation:spk .8s forwards}
+@keyframes spk{to{opacity:0;transform:translateY(24px) scale(.2) rotate(120deg)}}
+
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+ .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div id="bal" aria-hidden="true"></div>
+
+<header>
+  <h1 id="title" aria-live="polite"></h1>
+  <button class="btn" id="openBtn">🎁 Buka Kejutan</button>
+  <button class="cake hide" id="cake" aria-label="Tiup lilin">
+    <div class="flame"></div><div class="wick"></div><div class="candle"></div><div class="l1"></div><div class="l2"></div>
+  </button>
+  <p class="hint hide" id="hint">Klik lilinnya untuk meniup dan membuat permohonan 🕯️</p>
+</header>
+
+<main id="main" class="hide">
+  <section id="untuk">
+    <h2>Untuk Kamu 💌</h2>
+    <div class="grid" id="msgs"></div>
+  </section>
+
+  <section id="rest">
+    <h2>Kamu Boleh Istirahat 🌙</h2>
+    <p class="lead">Capek itu valid. Istirahat bukan menyerah, itu bagian dari perjalanan.</p>
+    <div class="card quote rv"><p id="qt"></p><button class="btn" id="qBtn">Kutipan berikutnya ✨</button></div>
+  </section>
+
+  <section id="spesial">
+    <h2>Alasan Kamu Spesial 🌟</h2>
+    <p class="lead">Klik kartunya untuk membuka.</p>
+    <div class="grid" id="reasons"></div>
+  </section>
+
+  <section id="hadiah" class="gift">
+    <h2>Hadiah Kecil 🎀</h2>
+    <p class="lead">Klik kotaknya. Tiap voucher berlaku selamanya.</p>
+    <button id="giftBtn" aria-label="Buka hadiah">🎁</button>
+    <p id="gcount" class="hint"></p>
+  </section>
+
+  <section id="album">
+    <h2>Album Kenangan 📸</h2>
+    <p class="lead">Klik foto untuk melihatnya lebih besar.</p>
+    <div class="album" id="albumGrid"></div>
+  </section>
+
+  <section class="end">
+    <h2>Terakhir, Dari Aku 💛</h2>
+    <p id="closing"></p>
+    <p class="sign" id="sign"></p>
+    <button class="btn" id="again">🎉 Rayakan Lagi</button>
+  </section>
+  <div id="mid" style="height:1px"></div>
+</main>
+
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-labelledby="mt">
+  <div class="md">
+    <button class="x" id="mx" aria-label="Tutup">×</button>
+    <div class="em" id="me"></div><img id="mimg" class="hide" alt=""><h3 id="mt"></h3><p id="mp"></p>
+    <button class="btn" id="mok">Terima kasih 💛</button>
+  </div>
+</div>
+
+<script>
+/* =====================  KONFIGURASI  ===================== */
+const CONFIG = {
+  penerima: "Citra Dina Mentari",
+  pengirim: "M Faris Abrar",
+  musikUrl: "musik.mp3",   // isi URL file .mp3 (mis. "musik.mp3"); kosongkan jika tanpa musik
+  pesan: [
+    ["Selamat ulang tahun 🎂","Hari ini hari kamu. Aku senang kamu lahir dan hadir di dunia ini, dan di hidup orang-orang di sekitarmu."],
+    ["Aku lihat usahamu","Mungkin tidak semua orang bilang, tapi kerja kerasmu terlihat. Banyak hal yang kamu tanggung diam-diam, dan aku menghargai itu."],
+    ["Kehadiranmu berarti","Kamu tidak perlu melakukan apa-apa untuk pantas dihargai. Kamu ada saja sudah membuat hari orang lain lebih baik."]
+  ],
+  kutipan: [
+    "Kamu sudah melewati hari-hari terberatmu sampai hari ini. Itu bukan hal kecil.",
+    "Jatuh bukan akhir cerita. Bangkit boleh pelan, boleh sambil istirahat dulu.",
+    "Lelah berarti kamu sudah berjuang. Itu bukan tanda kamu lemah.",
+    "Nilaimu tidak diukur dari seberapa produktif kamu hari ini.",
+    "Jalan pelan tetap jalan. Tidak ada yang mengejarmu.",
+    "Tidak apa-apa belum baik-baik saja. Kamu boleh minta tolong.",
+    "Istirahat bukan hadiah setelah selesai. Itu kebutuhan, dan kamu berhak."
+  ],
+  // [emoji, judul depan, isi belakang]  <- ganti placeholder sesuai kamu
+  apresiasi: [
+    ["🌷","sifat baik kamu","you are a kind of person, that i knew whom has her principal, and how could i not interest with kind of thatt??"],
+    ["🤝","hal yang bikin aku tertarik","kamu tidak sepert wanita lainnya, yang kulihat kamu cerdas, attractive pastinya, dan selalu bikin aku penasaran"],
+    ["💪","yang bikin aku kagum","kamu adalah wanita yang attractive yang belum pernah kujumpai sebelumnya, u bring my sparks back again!!, i really appreciated ur efforts while other never see that, but here am i, someone that u savee his life, and i wanna save u life too!!"],
+    ["😄","awal kenal kamu","asli, di hari kamu pesan minuman, and u said like [beng beng, beng], and ur friends laugh of that while i saw ur face, ouu shii, how cute and pwetty u are!??"],
+    ["🌈","yang bikin meleyot","ABSOLUTELY YOUR SMILEE!!!, tiap kamu senyum tuu yaa, ntah kenapa bikin aku salting mulu, soalnya maniss kaliiiii!!!!!"],
+    ["✨","hal yang kusyukuri","bersyukur dan senang rasanya bisa mengenalmu, u bring a lot of positive energy at me!!, like right now aku lagi rutin olahraga, dan udah seminggu lah aku olahraga, dan itu semua berkat dirimuu dinn!!"]
+  ],
+  voucher: [
+    ["😴","Voucher Tidur Siang Tanpa Rasa Bersalah","Berlaku kapan saja. Dilarang merasa bersalah."],
+    ["🍜","Voucher Ditraktir Makan","Makanan pilihanmu, aku yang bayar."],
+    ["👂","Voucher Didengerin Curhat","Tanpa menghakimi, tanpa kasih solusi kalau tidak diminta."],
+    ["🫧","Voucher Libur Overthinking","Berlaku 24 jam. Boleh diperpanjang."]
+  ],
+  // Album: taruh foto di folder yang sama dengan index.html, lalu isi nama file di "src".
+  // Kosongkan src ("") untuk menampilkan bingkai kosong. Tambah/hapus baris sesuai jumlah foto.
+  album: [
+    {src:"WhatsApp Image 2026-10-24 at 02.34.09.jpeg", cap:"HALOOOWWW!!!"},
+    {src:"WIN_20261016_19_35_07_Pro.jpg", cap:"IHH LUCUU DEEE"},
+    {src:"WhatsApp Image 2026-10-24 at 02.34.10.jpeg", cap:"IMYUTT"},
+    {src:"WhatsApp Image 2026-10-24 at 02.31.21.jpeg", cap:"pap pertama yang tidak once seen darimuu<3"},
+    {src:"dinuy4 at 02.34.10.jpeg", cap:"BISMILLAH"},
+    {src:"dinuy 2026-10-24 at 02.34.10.jpeg", cap:"haloo kakak cantikkk"},
+    {src:"WIN_20261016_19_38_11_Pro.jpg", cap:"BISMILLAH PART 2"}
+  ],
+  penutup: "Terima kasih sudah bertahan sejauh ini. Kamu tidak harus kuat setiap saat. Kapan pun kamu capek, ingat bahwa ada aku yang peduli sama kamu. btw ingat mimpi kita buat dapetin salary dollarr yakannn???"
+};
+/* =====================  UTIL  ===================== */
+const $=id=>document.getElementById(id);
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const esc=s=>String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+
+/* =====================  POPUP  ===================== */
+const ov=$('ov');
+function popup(emoji,title,text,img){const im=$('mimg');im.classList.toggle('hide',!img);if(img){im.src=img;im.alt=title}$('me').classList.toggle('hide',!!img);$('me').textContent=emoji;$('mt').textContent=title;$('mp').textContent=text;ov.classList.add('show');$('mok').focus()}
+function closePop(){ov.classList.remove('show')}
+$('mx').onclick=$('mok').onclick=closePop;
+ov.addEventListener('click',e=>{if(e.target===ov)closePop()});
+addEventListener('keydown',e=>{if(e.key==='Escape')closePop()});
+
+/* =====================  CONFETTI & KEMBANG API (canvas)  ===================== */
+const cv=$('fx'),cx=cv.getContext('2d');let P=[],run=false;
+function size(){cv.width=innerWidth;cv.height=innerHeight}size();addEventListener('resize',size);
+const COL=['#f58aa8','#ffd36b','#c3a6f0','#ffb38a','#fff','#d4a017'];
+function confetti(n=140,x=innerWidth/2,y=innerHeight*.4){
+  if(reduce)n=Math.min(n,30);
+  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=4+Math.random()*9;
+    P.push({k:'c',x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-5,w:6+Math.random()*6,h:4+Math.random()*5,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:COL[i%COL.length],l:1})}
+  go()}
+function firework(){
+  const x=innerWidth*(.15+Math.random()*.7),y=innerHeight*(.15+Math.random()*.4),c=COL[Math.floor(Math.random()*COL.length)];
+  for(let i=0;i<60;i++){const a=i/60*Math.PI*2,v=2+Math.random()*4;P.push({k:'s',x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,c,l:1})}
+  go()}
+function fireworks(n=6){for(let i=0;i<n;i++)setTimeout(firework,i*450)}
+function go(){if(!run){run=true;requestAnimationFrame(tick)}}
+function tick(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  P=P.filter(p=>p.l>0&&p.y<cv.height+30);
+  for(const p of P){
+    p.x+=p.vx;p.y+=p.vy;p.vy+=p.k==='c'?.22:.06;p.vx*=.99;p.l-=p.k==='c'?.005:.014;
+    cx.globalAlpha=Math.max(p.l,0);cx.fillStyle=p.c;
+    if(p.k==='c'){p.r+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore()}
+    else{cx.beginPath();cx.arc(p.x,p.y,2.5,0,7);cx.fill()}
+  }
+  cx.globalAlpha=1;
+  if(P.length)requestAnimationFrame(tick);else run=false}
+
+/* =====================  BALON  ===================== */
+function balloons(n=14){
+  if(reduce)n=4;
+  for(let i=0;i<n;i++){const b=el('div','b');
+    b.style.left=Math.random()*94+'%';b.style.background=COL[i%4===3?0:i%4];
+    b.style.animationDuration=(7+Math.random()*7)+'s';b.style.animationDelay=(Math.random()*2.5)+'s';
+    b.style.transform=`scale(${.8+Math.random()*.6})`;
+    $('bal').appendChild(b);b.addEventListener('animationend',()=>b.remove())}}
+
+/* =====================  BUKA KEJUTAN & MENGETIK  ===================== */
+function type(text,done){
+  const t=$('title');t.classList.add('t');
+  if(reduce){t.textContent=text;t.classList.remove('t');done&&done();return}
+  let i=0;(function s(){t.textContent=text.slice(0,++i);
+    if(i<text.length)setTimeout(s,70);else{t.classList.remove('t');done&&done()}})()}
+$('openBtn').onclick=()=>{
+  $('openBtn').classList.add('hide');
+  startMusic();
+  confetti(220);balloons();
+  type(`Selamat Ulang Tahun, ${CONFIG.penerima}! 🎂`,()=>{
+    $('cake').classList.remove('hide');$('hint').classList.remove('hide');
+    $('main').classList.remove('hide');watchReveal();watchMid();
+    setTimeout(()=>popup('🎈','Hari ini hari spesialmu!','Ada beberapa kejutan kecil di bawah. Scroll pelan-pelan ya, nikmati satu per satu.'),500);
+  });
+};
+$('openBtn').classList.add('pulse');
+
+/* Lilin: klik untuk tiup / nyalakan lagi */
+$('cake').onclick=()=>{
+  const c=$('cake');
+  if(c.classList.contains('off')){c.classList.remove('off');return}
+  c.classList.add('off');confetti(160);
+  setTimeout(()=>popup('🌠','Permohonanmu terkirim!','Semoga semua yang kamu harapkan pelan-pelan jadi nyata. Dan semoga kamu sempat bernapas lega hari ini.'),400)};
+
+/* =====================  RENDER KONTEN  ===================== */
+$('msgs').append(...CONFIG.pesan.map(([h,t])=>el('div','card rv',`<h3>${esc(h)}</h3><p>${esc(t)}</p>`)));
+CONFIG.apresiasi.forEach(([e,f,b])=>{
+  const d=el('button','flip rv',`<div class="fi"><div class="fr"><span>${e}</span>${esc(f)}</div><div class="bk">${esc(b)}</div></div>`);
+  d.setAttribute('aria-pressed','false');
+  d.onclick=()=>{d.classList.toggle('on');d.setAttribute('aria-pressed',d.classList.contains('on'))};
+  $('reasons').appendChild(d)});
+const rots=[-3,2,-1.5,3,-2,1.5];
+CONFIG.album.forEach((a,i)=>{
+  const ph='<span>WhatsApp Image 2026-10-24 at 02.34.09.jpeg</span>';
+  const wrap=a.src?el('button','pol rv'):el('div','pol rv');
+  wrap.style.setProperty('--r',rots[i%rots.length]+'deg');
+  const box=el('div','ph',a.src?'':ph);
+  if(a.src){const im=new Image();im.loading='lazy';im.alt=a.cap;im.src=a.src;im.onerror=()=>{box.innerHTML=ph;wrap.onclick=null};box.appendChild(im);
+    wrap.onclick=()=>popup('📷',a.cap,'',a.src);wrap.setAttribute('aria-label','Perbesar foto: '+a.cap)}
+  wrap.append(box,el('div','cap',esc(a.cap)));
+  $('albumGrid').appendChild(wrap)});
+$('closing').textContent=CONFIG.penutup;
+$('sign').textContent='— '+CONFIG.pengirim;
+
+/* Kutipan acak (tanpa pengulangan langsung) */
+let qi=-1;
+function nextQuote(){
+  let n;do{n=Math.floor(Math.random()*CONFIG.kutipan.length)}while(n===qi&&CONFIG.kutipan.length>1);
+  qi=n;const p=$('qt');p.classList.remove('swap');void p.offsetWidth;p.textContent=CONFIG.kutipan[n];p.classList.add('swap')}
+$('qBtn').onclick=nextQuote;nextQuote();
+
+/* Hadiah: voucher bergantian */
+let gi=0;
+$('giftBtn').onclick=()=>{
+  const [e,t,d]=CONFIG.voucher[gi%CONFIG.voucher.length];gi++;
+  confetti(80);popup(e,t,d);
+  $('gcount').textContent=`Hadiah dibuka: ${Math.min(gi,CONFIG.voucher.length)} dari ${CONFIG.voucher.length}`};
+
+/* Penutup */
+$('again').onclick=()=>{confetti(200);fireworks();balloons(10);
+  setTimeout(()=>popup('💛','Kamu luar biasa!','Jangan lupa istirahat ya. Pelan-pelan juga tidak apa-apa.'),2200)};
+
+/* =====================  SCROLL: REVEAL & POPUP TENGAH  ===================== */
+function watchReveal(){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+  document.querySelectorAll('.rv').forEach((c,i)=>{c.style.transitionDelay=(i%3)*.12+'s';io.observe(c)})}
+function watchMid(){
+  const io=new IntersectionObserver(es=>{if(es[0].isIntersecting){io.disconnect();
+    popup('🌟','Kamu dihargai','Kalau kamu baca sampai sini, ingat satu hal: usahamu terlihat dan berarti, bahkan di hari kamu merasa tidak berbuat apa-apa.')}},{threshold:1});
+  io.observe($('spesial'))}
+
+/* =====================  SPARKLE KURSOR / TAP  ===================== */
+let last=0;
+function spark(x,y){
+  if(reduce)return;const s=el('span','sp','✦');
+  s.style.left=x+'px';s.style.top=y+'px';s.style.fontSize=(10+Math.random()*14)+'px';
+  document.body.appendChild(s);setTimeout(()=>s.remove(),800)}
+addEventListener('pointermove',e=>{if(e.pointerType==='mouse'&&Date.now()-last>40){last=Date.now();spark(e.clientX,e.clientY)}});
+addEventListener('pointerdown',e=>{for(let i=0;i<4;i++)spark(e.clientX+(Math.random()-.5)*30,e.clientY+(Math.random()-.5)*30)});
+
+/* =====================  MUSIK (otomatis menyala saat "Buka Kejutan" diklik)  ===================== */
+function startMusic(){
+  if(!CONFIG.musikUrl)return;
+  const au=new Audio(CONFIG.musikUrl);au.loop=true;au.volume=.6;
+  au.play().catch(()=>{});
+}
+</script>
+</body>
+</html>
